@@ -1,0 +1,25 @@
+{
+  "name": "sre-contact-form-backend",
+  "version": "1.0.0",
+  "description": "Backend server for SRE contact form email submissions",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "build": "npm run build:frontend && npm run copy:dist",
+    "build:frontend": "cd ../frontend && npm install && npm run build",
+    "copy:dist": "xcopy ..\\frontend\\dist public\\dist\\ /S /E /Y && echo Build complete!",
+    "build:win": "cd ../frontend && npm install && npm run build && cd ../backend && xcopy ..\\frontend\\dist public\\dist\\ /S /E /Y && echo ✅ Frontend built and copied to backend"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "nodemailer": "^6.9.7",
+    "body-parser": "^1.20.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
