@@ -20,6 +20,3 @@ yarn-error.log
 # Logs
 logs/
 *.log
-
-# Frontend build output (rebuild on server with npm run build)
-dist/
