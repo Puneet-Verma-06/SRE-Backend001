@@ -7,10 +7,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "build": "npm run build:frontend && npm run copy:dist",
-    "build:frontend": "cd .. && npm install && npm run build",
-    "copy:dist": "cp -r ../dist/* ./dist/ && echo Build complete!",
-    "build:win": "cd .. && npm install && npm run build && xcopy ..\\dist public\\dist\\ /S /E /Y && echo Frontend built and copied to backend"
+    "build": "echo Frontend dist is pre-built and committed. No build step needed."
   },
   "dependencies": {
     "express": "^4.18.2",
