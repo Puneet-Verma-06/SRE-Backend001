@@ -20,3 +20,5 @@ yarn-error.log
 # Logs
 logs/
 *.log
+
+# NOTE: dist/ is intentionally NOT ignored - it must be committed for deployment
