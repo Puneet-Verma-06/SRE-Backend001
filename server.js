@@ -3,6 +3,8 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import nodemailer from 'nodemailer';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
 // Load environment variables
 dotenv.config();
@@ -10,37 +12,9 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-const allowedOrigins = [
-  process.env.FRONTEND_URL || 'http://localhost:5173',
-  'http://localhost:5173',
-  'http://localhost:5174',
-  'http://127.0.0.1:5173',
-  'http://127.0.0.1:5174'
-];
-
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV === 'development') {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ['POST', 'GET'],
-  credentials: true
-}));
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// Serve frontend static files in production
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Serve static files from backend/public/dist
 if (process.env.NODE_ENV === 'production') {
   const distPath = join(__dirname, 'dist');
   app.use(express.static(distPath));
@@ -52,6 +26,32 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(join(distPath, 'index.html'));
   });
 }
+
+// CORS – allow both www and non-www variants
+const allowedOrigins = [
+  'https://www.sregroupin.com',
+  'https://sregroupin.com',
+  process.env.FRONTEND_URL || 'http://localhost:5173',
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:5174'
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['POST', 'GET'],
+  credentials: true
+}));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Email transporter configuration
 const transporter = nodemailer.createTransport({
